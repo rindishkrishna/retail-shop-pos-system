@@ -9,6 +9,9 @@ import {
   MinusCircleOutlined,
 } from "@ant-design/icons";
 import { Table, Button, Modal, message, Form, Input, Select } from "antd";
+import { addDoc, collection, setDoc,updateDoc, deleteDoc, doc, query, onSnapshot } from "firebase/firestore";
+import { firestore } from '../firebase';
+import { v4 as uuidv4 } from 'uuid';
 const CartPage = () => {
   const [subTotal, setSubTotal] = useState(0);
   const [billPopup, setBillPopup] = useState(false);
@@ -32,17 +35,10 @@ const CartPage = () => {
   };
   const columns = [
     { title: "Name", dataIndex: "name" },
-    {
-      title: "Image",
-      dataIndex: "image",
-      render: (image, record) => (
-        <img src={image} alt={record.name} height="60" width="60" />
-      ),
-    },
     { title: "Price", dataIndex: "price" },
     {
       title: "Quantity",
-      dataIndex: "_id",
+      dataIndex: "id",
       render: (id, record) => (
         <div>
           <PlusCircleOutlined
@@ -61,7 +57,7 @@ const CartPage = () => {
     },
     {
       title: "Actions",
-      dataIndex: "_id",
+      dataIndex: "id",
       render: (id, record) => (
         <DeleteOutlined
           style={{ cursor: "pointer" }}
@@ -85,20 +81,29 @@ const CartPage = () => {
   //handleSubmit
   const handleSubmit = async (value) => {
     try {
-      const newObject = {
-        ...value,
+      // const newObject = {
+      //   ...value,
+      //   id:uuidv4(),
+      //   cartItems,
+      //   subTotal,
+      //   tax: Number(((subTotal / 100) * 10).toFixed(2)),
+      //   totalAmount: Number(
+      //     Number(subTotal) + Number(((subTotal / 100) * 10).toFixed(2))
+      //   ),
+      // };
+      var today = new Date(),
+      date = today.getDate()+ '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+      const newObject={
         cartItems,
         subTotal,
-        tax: Number(((subTotal / 100) * 10).toFixed(2)),
-        totalAmount: Number(
-          Number(subTotal) + Number(((subTotal / 100) * 10).toFixed(2))
-        ),
-        userId: JSON.parse(localStorage.getItem("auth"))._id,
-      };
-      // console.log(newObject);
-      await axios.post("/api/bills/add-bills", newObject);
+        date,
+        id:uuidv4()
+      }
+      // await axios.post("/api/bills/add-bills", newObject);
+      await addDoc(collection(firestore, "bill"), newObject);
+      console.log(newObject)
       message.success("Bill Generated");
-      navigate("/bills");
+      navigate("/bills",{state:newObject});
     } catch (error) {
       message.error("Something went wrong");
       console.log(error);
@@ -111,9 +116,9 @@ const CartPage = () => {
       <div className="d-flex flex-column align-items-end">
         <hr />
         <h3>
-          SUBT TOTAL : $ <b> {subTotal}</b> /-{" "}
+          SUBT TOTAL : ₹ <b> {subTotal}</b> /-{" "}
         </h3>
-        <Button type="primary" onClick={() => setBillPopup(true)}>
+        <Button type="primary" onClick={handleSubmit}>
           Create Invoice
         </Button>
       </div>

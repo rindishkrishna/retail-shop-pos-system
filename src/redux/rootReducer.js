@@ -24,7 +24,7 @@ export const rootReducer = (state = intialState, action) => {
       return {
         ...state,
         cartItems: state.cartItems.map((item) =>
-          item._id === action.payload._id
+          item.id === action.payload.id
             ? { ...item, quantity: action.payload.quantity }
             : item
         ),
@@ -33,9 +33,14 @@ export const rootReducer = (state = intialState, action) => {
       return {
         ...state,
         cartItems: state.cartItems.filter(
-          (item) => item._id !== action.payload._id
+          (item) => item.id !== action.payload.id
         ),
       };
+    case "DELETE_ALL_FROM_CART":
+      return{
+        ...state,
+        cartItems:[]
+      }
     default:
       return state;
   }

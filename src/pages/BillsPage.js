@@ -1,27 +1,43 @@
 import React, { useEffect, useState, useRef } from "react";
 import DefaultLayout from "../components/DefaultLayout";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { EyeOutlined } from "@ant-design/icons";
 import ReactToPrint from "react-to-print";
 import { useReactToPrint } from "react-to-print";
 import axios from "axios";
 import { Modal, Button, Table } from "antd";
 import "../styles/InvoiceStyles.css";
+import { addDoc, collection, setDoc,updateDoc, deleteDoc, doc, query, onSnapshot } from "firebase/firestore";
+import { firestore } from '../firebase';
+import {useLocation} from 'react-router-dom';
 const BillsPage = () => {
   const componentRef = useRef();
   const dispatch = useDispatch();
   const [billsData, setBillsData] = useState([]);
   const [popupModal, setPopupModal] = useState(false);
   const [selectedBill, setSelectedBill] = useState(null);
+  const { cartItems } = useSelector((state) => state.rootReducer);
+  const location = useLocation();
   const getAllBills = async () => {
     try {
       dispatch({
         type: "SHOW_LOADING",
       });
-      const { data } = await axios.get("/api/bills/get-bills");
-      setBillsData(data);
+      // const { data } = await axios.get("/api/bills/get-bills");
+      const data = await query(collection(firestore, "bill"));
+      await localStorage.removeItem("cartItems", JSON.stringify(cartItems));
+      dispatch({
+        type: "DELETE_ALL_FROM_CART",
+        payload: cartItems,
+      })
+      onSnapshot(data, (querySnapshot) => {
+      const databaseInfo = [];
+        querySnapshot.forEach((doc) => {
+        databaseInfo.push({ ...doc.data()});
+        });
+        setBillsData(databaseInfo)
+        });
       dispatch({ type: "HIDE_LOADING" });
-      console.log(data);
     } catch (error) {
       dispatch({ type: "HIDE_LOADING" });
       console.log(error);
@@ -29,7 +45,13 @@ const BillsPage = () => {
   };
   //useEffect
   useEffect(() => {
+
     getAllBills();
+    if(location.state){
+      console.log(location.state)
+      setSelectedBill(location.state);
+      setPopupModal(true);
+    }
     //eslint-disable-next-line
   }, []);
   //print function
@@ -39,24 +61,17 @@ const BillsPage = () => {
 
   //able data
   const columns = [
-    { title: "ID ", dataIndex: "_id" },
-    {
-      title: "Cutomer Name",
-      dataIndex: "customerName",
-    },
-    { title: "Contact No", dataIndex: "customerNumber" },
-    { title: "Subtotal", dataIndex: "subTotal" },
-    { title: "Tax", dataIndex: "tax" },
-    { title: "Total Amount", dataIndex: "totalAmount" },
-
+    { title: "ID ", dataIndex: "id" },
+    { title: "Total Amount", dataIndex: "subTotal" },
     {
       title: "Actions",
-      dataIndex: "_id",
+      dataIndex: "id",
       render: (id, record) => (
         <div>
           <EyeOutlined
             style={{ cursor: "pointer" }}
             onClick={() => {
+              console.log(record)
               setSelectedBill(record);
               setPopupModal(true);
             }}
@@ -65,7 +80,6 @@ const BillsPage = () => {
       ),
     },
   ];
-  console.log(selectedBill);
   return (
     <DefaultLayout>
       <div className="d-flex justify-content-between">
@@ -88,10 +102,10 @@ const BillsPage = () => {
           {/* ============ invoice modal start ==============  */}
           <div id="invoice-POS" ref={componentRef}>
             <center id="top">
-              <div className="logo" />
+              {/* <div className="logo" /> */}
               <div className="info">
-                <h2>Techinfo YT POS</h2>
-                <p> Contact : 123456 | Mumbai Maharashtra</p>
+                <h2>BEERU SONS</h2>
+                <p>KAIPAMANGALAM , KOORIKKUZHI, THRISSUR, 680681, +91 9746656021</p>
               </div>
               {/*End Info*/}
             </center>
@@ -99,11 +113,9 @@ const BillsPage = () => {
             <div id="mid">
               <div className="mt-2">
                 <p>
-                  Customer Name : <b>{selectedBill.customerName}</b>
+                  Bill ID : {selectedBill.id}
                   <br />
-                  Phone No : <b>{selectedBill.customerNumber}</b>
-                  <br />
-                  Date : <b>{selectedBill.date.toString().substring(0, 10)}</b>
+                  Date : <b>{selectedBill.date}</b>
                   <br />
                 </p>
                 <hr style={{ margin: "5px" }} />
@@ -150,24 +162,12 @@ const BillsPage = () => {
                     ))}
 
                     <tr className="tabletitle">
-                      <td />
-                      <td />
-                      <td className="Rate">
-                        <h2>tax</h2>
-                      </td>
-                      <td className="payment">
-                        <h2>${selectedBill.tax}</h2>
-                      </td>
-                    </tr>
-                    <tr className="tabletitle">
-                      <td />
-                      <td />
                       <td className="Rate">
                         <h2>Grand Total</h2>
                       </td>
                       <td className="payment">
                         <h2>
-                          <b>${selectedBill.totalAmount}</b>
+                          <b>₹{selectedBill.subTotal}</b>
                         </h2>
                       </td>
                     </tr>
@@ -177,10 +177,7 @@ const BillsPage = () => {
               {/*End Table*/}
               <div id="legalcopy">
                 <p className="legal">
-                  <strong>Thank you for your order!</strong> 10% GST application
-                  on total amount.Please note that this is non refundable amount
-                  for any assistance please write email
-                  <b> help@mydomain.com</b>
+                  <strong>Thank you for your order!</strong>
                 </p>
               </div>
             </div>

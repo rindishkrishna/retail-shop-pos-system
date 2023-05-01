@@ -34,7 +34,7 @@ const DefaultLayout = ({ children }) => {
       {loading && <Spinner />}
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo">
-          <h1 className="text-center text-light font-wight-bold mt-4">POS</h1>
+          <h1 className="text-center text-light font-wight-bold mt-4">BEERU SONS</h1>
         </div>
         <Menu
           theme="dark"
@@ -44,24 +44,11 @@ const DefaultLayout = ({ children }) => {
           <Menu.Item key="/" icon={<HomeOutlined />}>
             <Link to="/">Home</Link>
           </Menu.Item>
-          <Menu.Item key="/bills" icon={<CopyOutlined />}>
-            <Link to="/bills">Bills</Link>
-          </Menu.Item>
           <Menu.Item key="/items" icon={<UnorderedListOutlined />}>
             <Link to="/items">Items</Link>
           </Menu.Item>
-          <Menu.Item key="/customers" icon={<UserOutlined />}>
-            <Link to="/customers">Cutomers</Link>
-          </Menu.Item>
-          <Menu.Item
-            key="/logout"
-            icon={<LogoutOutlined />}
-            onClick={() => {
-              localStorage.removeItem("auth");
-              navigate("/login");
-            }}
-          >
-            Logout
+          <Menu.Item key="/bills" icon={<CopyOutlined />}>
+            <Link to="/bills">Bills</Link>
           </Menu.Item>
         </Menu>
       </Sider>
