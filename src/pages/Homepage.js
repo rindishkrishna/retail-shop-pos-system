@@ -8,7 +8,12 @@ import { addDoc, collection, setDoc,updateDoc, deleteDoc, doc, query, onSnapshot
 import { firestore } from '../firebase';
 const Homepage = () => {
   const [itemsData, setItemsData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const dispatch = useDispatch();
+
+  const handleInputChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
 
   //useEffect
   useEffect(() => {
@@ -35,11 +40,33 @@ const Homepage = () => {
   }, [dispatch]);
   return (
     <DefaultLayout>
+      <input
+        type="text"
+        placeholder="Search..."
+        // value={itemsData}
+        onChange={handleInputChange}
+        style={{
+          width: '100%',
+          height: '50px',
+          fontSize: '20px',
+          padding: '10px',
+          borderRadius: '5px',
+          border: 'none',
+          boxShadow: '0 0 5px rgba(0, 0, 0, 0.1)',
+          marginBottom:'20px'
+        }}
+      />
       <div className="d-flex">
       </div>
       <Row>
         {itemsData
-          .map((item) => (
+    .filter(post => {
+    if (searchTerm === '') {
+      return post;
+    } else if (post.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+      return post;
+    }
+  }).map((item) => (
             <Col xs={24} lg={6} md={12} sm={6}>
               <ItemList key={item.id} item={item} />
             </Col>
