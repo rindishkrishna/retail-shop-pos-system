@@ -11,8 +11,23 @@ import data from "../utils/data"
 const ItemPage = () => {
   const dispatch = useDispatch();
   const [itemsData, setItemsData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [popupModal, setPopupModal] = useState(false);
   const [editItem, setEditItem] = useState(null);
+
+  const handleInputChange = (searchTerm) => {
+    const filteredEvents = itemsData.filter( post => {
+     if (post.name.includes(searchTerm.toLowerCase())){
+        return post;
+      }
+    })
+    if(searchTerm===''){
+      setFilteredData(itemsData)
+    }
+    else{
+      setFilteredData(filteredEvents);
+    }
+  };
   const getAllItems = async () => {
     // try {
     //   dispatch({
@@ -34,6 +49,7 @@ const ItemPage = () => {
       databaseInfo.push({ ...doc.data(), id: doc.id });
       });
         setItemsData(databaseInfo)
+        setFilteredData(databaseInfo)
       });
 
   };
@@ -62,7 +78,7 @@ const ItemPage = () => {
     }
   };
 
-  //able data
+  //table data
   const columns = [
     { title: "Name", dataIndex: "name" },
     { title: "Price", dataIndex: "price" },
@@ -135,8 +151,22 @@ const ItemPage = () => {
           Add Item
         </Button>
       </div>
-
-      <Table columns={columns} dataSource={itemsData} bordered />
+      <Input.Search
+        type="text"
+        placeholder="Search..."
+        onSearch={handleInputChange}
+        style={{
+          width: '100%',
+          height: '50px',
+          fontSize: '20px',
+          padding: '10px',
+          borderRadius: '5px',
+          border: 'none',
+          boxShadow: '0 0 5px rgba(0, 0, 0, 0.1)',
+          marginBottom:'20px'
+        }}
+      />
+      <Table columns={columns} dataSource={filteredData} bordered />
 
       {popupModal && (
         <Modal

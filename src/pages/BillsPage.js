@@ -105,7 +105,7 @@ const BillsPage = () => {
               {/* <div className="logo" /> */}
               <div className="info">
                 <h2>BEERU SONS</h2>
-                <p>KAIPAMANGALAM , KOORIKKUZHI, THRISSUR, 680681, +91 9746656021</p>
+                <p>KAIPAMANGALAM , KOORIKKUZHI, THRISSUR, 680681, +91 9526684290</p>
               </div>
               {/*End Info*/}
             </center>
@@ -130,11 +130,11 @@ const BillsPage = () => {
                       <td className="item">
                         <h2>Item</h2>
                       </td>
-                      <td className="Hours">
-                        <h2>Qty</h2>
-                      </td>
                       <td className="Rate">
                         <h2>Price</h2>
+                      </td>
+                      <td className="Hours">
+                        <h2>Qty</h2>
                       </td>
                       <td className="Rate">
                         <h2>Total</h2>
