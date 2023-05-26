@@ -17,7 +17,7 @@ const ItemPage = () => {
 
   const handleInputChange = (searchTerm) => {
     const filteredEvents = itemsData.filter( post => {
-     if (post.name.includes(searchTerm.toLowerCase())){
+     if (post.name.toLowerCase().includes(searchTerm.toLowerCase())){
         return post;
       }
     })

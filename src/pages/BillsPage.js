@@ -131,10 +131,10 @@ const BillsPage = () => {
                         <h2>Item</h2>
                       </td>
                       <td className="Rate">
-                        <h2>Price</h2>
+                      <h2>Qty</h2>
                       </td>
                       <td className="Hours">
-                        <h2>Qty</h2>
+                      <h2>Price</h2>
                       </td>
                       <td className="Rate">
                         <h2>Total</h2>
