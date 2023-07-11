@@ -90,7 +90,7 @@ const BillsPage = () => {
 
       {popupModal && (
         <Modal
-          width={400}
+          width={1000}
           pagination={false}
           title="Invoice Details"
           visible={popupModal}
@@ -144,17 +144,17 @@ const BillsPage = () => {
                       <>
                         <tr className="service">
                           <td className="tableitem">
-                            <p className="itemtext">{item.name}</p>
+                            <p className="itemtext name"><strong>{item.name}</strong></p>
                           </td>
                           <td className="tableitem">
-                            <p className="itemtext">{item.quantity}</p>
+                            <p className="itemtext"><strong>{item.quantity}</strong></p>
                           </td>
                           <td className="tableitem">
-                            <p className="itemtext">{item.price}</p>
+                            <p className="itemtext"><strong>{item.price}</strong></p>
                           </td>
                           <td className="tableitem">
                             <p className="itemtext">
-                              {item.quantity * item.price}
+                            <strong>{item.quantity * item.price}</strong>
                             </p>
                           </td>
                         </tr>
@@ -163,7 +163,7 @@ const BillsPage = () => {
 
                     <tr className="tabletitle">
                       <td className="Rate">
-                        <h2>Grand Total</h2>
+                      <strong><h2>Grand Total</h2></strong>
                       </td>
                       <td className="payment">
                         <h2>

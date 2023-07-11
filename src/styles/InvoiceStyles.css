@@ -2,9 +2,8 @@
   box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
   padding: 4mm;
   margin: 0 auto;
-  width: 76mm;
+  width: 80mm;
   background: #fff;
-  font-weight: 900;
 }
 
 ::selection {
@@ -17,10 +16,11 @@
 }
 h1 {
   font-size: 1.5em;
-  color: #222;
+  color: #000;
 }
 h2 {
-  font-size: 0.9em;
+  font-size: 1em;
+  color: #000;
 }
 h3 {
   font-size: 1.2em;
@@ -28,8 +28,8 @@ h3 {
   line-height: 2em;
 }
 p {
-  font-size: 0.7em;
-  color: #666;
+  font-size: 0.9em;
+  color: #000;
   line-height: 1.2em;
 }
 
@@ -86,7 +86,7 @@ table {
   } */
 .tabletitle {
   /* //padding: 5px; */
-  font-size: 0.5em;
+  font-size: 0.9em;
   background: #eee;
 }
 .service {
@@ -96,9 +96,12 @@ table {
   width: 24mm;
 }
 .itemtext {
-  font-size: 0.5em;
+  font-size: 0.9em;
 }
 
 #legalcopy {
   margin-top: 5mm;
+}
+.name{
+  margin-right: 2mm;
 }
