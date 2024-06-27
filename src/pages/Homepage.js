@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import axios from "axios";
 import { Row, Col } from "antd";
@@ -14,9 +14,10 @@ const Homepage = () => {
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
   };
-
+  const inputRef = useRef(null);
   //useEffect
   useEffect(() => {
+    inputRef.current.focus();
     const getAllItems = async () => {
       try {
         dispatch({
@@ -43,6 +44,7 @@ const Homepage = () => {
       <input
         type="text"
         placeholder="Search..."
+        ref={inputRef}
         // value={itemsData}
         onChange={handleInputChange}
         style={{
@@ -68,7 +70,7 @@ const Homepage = () => {
     }
   }).map((item) => (
             <Col xs={24} lg={6} md={12} sm={6}>
-              <ItemList key={item.id} item={item} />
+              <ItemList key={item.id} item={item} inputRef={inputRef} />
             </Col>
           ))}
       </Row>

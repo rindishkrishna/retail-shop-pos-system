@@ -1,10 +1,12 @@
 import React from "react";
 import { Button, Card } from "antd";
 import { useDispatch } from "react-redux";
-const ItemList = ({ item }) => {
+const ItemList = ({ item, inputRef }) => {
   const dispatch = useDispatch();
   //update cart handler
   const handleAddTOCart = () => {
+    inputRef.current.value = '';
+    inputRef.current.focus()
     dispatch({
       type: "ADD_TO_CART",
       payload: { ...item, quantity: 1 },
